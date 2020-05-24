@@ -3,7 +3,7 @@
 
 const minifyInline = require('gulp-minify-inline');
 const saveLicense = require('uglify-save-license');
-// 
+//
 //gulp.task('minify-inline', function() {
 //  gulp.src('src/*.html')
 //    .pipe(gulp.dest('dist/'))

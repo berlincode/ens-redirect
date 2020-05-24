@@ -25,7 +25,7 @@
 
   /* show which domain we are resolving */
   document.getElementById('d-text').textContent = 'Redirect to "' + hostnameENS + '"';
-  
+
   /* now calculate the hash of the domain which is then send to our ethereum rpc provider */
   var ethEnsNamehash = window.ethEnsNamehash;
   var nameHash = ethEnsNamehash.hash(hostnameENS);
@@ -77,7 +77,7 @@
   };
 
   var requestPostJson = function(url, data, done){
-    var xhr = new XMLHttpRequest();   // new HttpRequest instance
+    var xhr = new XMLHttpRequest(); // new HttpRequest instance
     xhr.onreadystatechange = function() {
       if (this.readyState == 4){
         var response;

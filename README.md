@@ -8,8 +8,8 @@ Works with all browsers.
 
 It should help start adoption of ENS until all major Browsers are aware of ENS/IPFS natively.
 
-Test it now:
-------------
+Test it now
+-----------
 
 We've deployed this project to liquidmode.com. So if you want to visit e.g. [**www.digioptions**.eth](https://www.digioptions.eth) you
 can now use [**www.digioptions**.liquidmode.com](http://www.digioptions.liquidmode.com).

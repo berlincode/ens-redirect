@@ -24,6 +24,6 @@ const state = {
   title: null /* default: 'DigiOptions App' */
 };
 
-let ComponentFactory = React.createFactory(Loader);
-let markup = ReactDOMServer.renderToStaticMarkup(ComponentFactory(state));
+const ComponentFactory = React.createElement.bind(null, Loader); // was React.createFactory
+const markup = ReactDOMServer.renderToStaticMarkup(ComponentFactory(state));
 fs.writeFileSync('./dist/index.html', '<!DOCTYPE html>\n' + markup, 'utf8');

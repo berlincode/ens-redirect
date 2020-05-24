@@ -1,5 +1,4 @@
-_*
-/dist
-/node_modules
+/dist/
+/node_modules/
 /README.html
 /npm-debug.log
