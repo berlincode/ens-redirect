@@ -3,7 +3,7 @@ ens-redirect
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/berlincode/ens-redirect/blob/master/LICENSE)
 
-This is a small ENS (ethereum Name system) name resolver that redirects to an ipfs Gateway.
+This is a small ENS (ethereum name system) name resolver that redirects to an ipfs Gateway.
 Works with all browsers.
 
 It should help start adoption of ENS until all major Browsers are aware of ENS/IPFS natively.
