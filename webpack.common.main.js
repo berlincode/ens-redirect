@@ -2,10 +2,13 @@
 
 import path from 'path';
 import url from 'url';
-import {CleanWebpackPlugin} from 'clean-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import HtmlInlineScriptPlugin from 'html-inline-script-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import webpack from 'webpack';
+import HTMLInlineCSSWebpackPluginModule from 'html-inline-css-webpack-plugin';
+
+const HTMLInlineCSSWebpackPlugin = HTMLInlineCSSWebpackPluginModule.default;
 
 const {DefinePlugin/*, SourceMapDevToolPlugin */} = webpack;
 
@@ -53,15 +56,13 @@ const configMain = {
       {
         test: /\.(scss|css)$/,
         use: [
-          {
-            loader: 'style-loader',
-            options: {
-              insert: 'head', // insert style tag inside of <head>
-              injectType: 'singletonStyleTag' // this is for wrap all your style in just one style tag
-            },
-          },
+          MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
+            options: {
+              //modules: true,
+              //sourceMap: true,
+            },
           },
           {
             loader: 'sass-loader',
@@ -96,11 +97,14 @@ const configMain = {
       'process.env.NODE_DEBUG': JSON.stringify(process.env.NODE_DEBUG),
       'process.env.DEBUG': JSON.stringify(process.env.DEBUG)
     }),
-    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       template: 'template/index.html'
     }),
     new HtmlInlineScriptPlugin(),
+    new HTMLInlineCSSWebpackPlugin({
+      //leaveCSSFile: true,
+    }),
   ],
 };
 
