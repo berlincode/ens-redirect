@@ -2,6 +2,10 @@
 /* eslint-env es6 */
 /* eslint no-console: ["error", { allow: ["log", "warn", "error"] }] */
 
+import '../css/base.scss';
+
+import ethEnsNamehash from 'eth-ens-namehash';
+
 (function(){
   var removeDomainLevels = 2;
 
@@ -27,7 +31,6 @@
   document.getElementById('d-text').textContent = 'Redirect to "' + hostnameENS + '"';
 
   /* now calculate the hash of the domain which is then send to our ethereum rpc provider */
-  var ethEnsNamehash = window.ethEnsNamehash;
   var nameHash = ethEnsNamehash.hash(hostnameENS);
 
   /*
