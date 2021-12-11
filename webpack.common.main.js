@@ -97,7 +97,9 @@ const configMain = {
       'process.env.DEBUG': JSON.stringify(process.env.DEBUG)
     }),
     new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: 'template/index.html'
+    }),
     new HtmlInlineScriptPlugin(),
   ],
 };
