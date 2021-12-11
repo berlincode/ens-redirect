@@ -10,14 +10,14 @@ import HTMLInlineCSSWebpackPluginModule from 'html-inline-css-webpack-plugin';
 
 const HTMLInlineCSSWebpackPlugin = HTMLInlineCSSWebpackPluginModule.default;
 
-const {DefinePlugin/*, SourceMapDevToolPlugin */} = webpack;
+const {DefinePlugin, ProvidePlugin /*, SourceMapDevToolPlugin */} = webpack;
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 const configMain = {
   entry: {
     main: {
-      import: './js/main.js',
+      import: './js/client.js',
     },
   },
   output: {
@@ -97,9 +97,13 @@ const configMain = {
       'process.env.NODE_DEBUG': JSON.stringify(process.env.NODE_DEBUG),
       'process.env.DEBUG': JSON.stringify(process.env.DEBUG)
     }),
+    new ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
-      template: 'template/index.html'
+      template: 'template/index.html',
+      inject: 'body',
     }),
     new HtmlInlineScriptPlugin(),
     new HTMLInlineCSSWebpackPlugin({
