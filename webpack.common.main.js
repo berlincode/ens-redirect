@@ -2,6 +2,7 @@
 
 import path from 'path';
 import url from 'url';
+import TerserPlugin from 'terser-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import HtmlInlineScriptPlugin from 'html-inline-script-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
@@ -10,11 +11,12 @@ import HTMLInlineCSSWebpackPluginModule from 'html-inline-css-webpack-plugin';
 
 const HTMLInlineCSSWebpackPlugin = HTMLInlineCSSWebpackPluginModule.default;
 
-const {DefinePlugin, ProvidePlugin /*, SourceMapDevToolPlugin */} = webpack;
+const {DefinePlugin, ProvidePlugin /*, SourceMapDevToolPlugin*/} = webpack;
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 const configMain = {
+  devtool: false, // we use a custom SourceMapDevToolPlugin config
   entry: {
     main: {
       import: './js/client.js',
@@ -23,6 +25,8 @@ const configMain = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '',
+    //filename: '[name].js',
+    //chunkFilename: '[id].[chunkhash].js'
   },
   module: {
     rules: [
@@ -104,6 +108,7 @@ const configMain = {
     new HtmlWebpackPlugin({
       template: 'template/index.html',
       inject: 'body',
+      scriptLoading: 'block', // 'defer' attribute is invalid unless src attribtute is also specified
     }),
     new HtmlInlineScriptPlugin(),
     new HTMLInlineCSSWebpackPlugin({
@@ -122,12 +127,36 @@ const configMainDev = {
     //  'columns': true,
     //  'noSources': false,
     //  'namespace': ''
-    //}),
+    //})
   ],
 };
 
 const configMainProd = {
   mode: 'production',
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        //cache: true,
+        parallel: true,
+        //sourceMap: true, // Must be set to true if using source-maps in production
+        terserOptions: {
+          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+          mangle: true, // Note `mangle.properties` is `false` by default.
+          compress: {},
+        }
+      }),
+    ],
+  },
+  plugins: [
+    //new SourceMapDevToolPlugin({
+    //  'filename': process.env.PACKAGE_NAME + '.bundle-' + process.env.PACKAGE_VERSION + '-[fullhash].min.js.map',
+    //  'append': null,
+    //  'module': true,
+    //  'columns': true,
+    //  'noSources': false,
+    //  'namespace': ''
+    //}),
+  ],
 };
 
 export {
