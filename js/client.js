@@ -7,6 +7,13 @@ import '../css/base.scss';
 import ethEnsNamehash from 'eth-ens-namehash';
 
 (function(){
+
+  function console_log(msg){
+    if (window.console){
+      window.console.log(msg);
+    }
+  }
+
   var removeDomainLevels = 2;
 
   var ipfsBaseUrl = 'https://ipfs.infura.io/ipfs/';
@@ -35,7 +42,7 @@ import ethEnsNamehash from 'eth-ens-namehash';
 
   /*
     dots:
-        #0: dummy
+        #0: no ens name to reslove
         #1: lookupResolver
         #2: lookupContenthash
   */
@@ -65,9 +72,10 @@ import ethEnsNamehash from 'eth-ens-namehash';
 
     try{
       if (error){
-        if (window.console){
-          window.console.log(error);
-        }
+        // show input field
+        document.getElementById('input').style.display = 'block';
+
+        console_log(error);
         //sendError('Error: '+ error);
       }
     } catch (e){/*empty*/}
@@ -192,16 +200,25 @@ import ethEnsNamehash from 'eth-ens-namehash';
   };
 
   dotShow(); // signal that js started to execute
-  dotSetInOrder(0, null);
+
+  const noHostName = (hostnameParts.join('.') == '');
+  dotSetInOrder(0, noHostName? 'Please Enter a hostname:' : null);
+  if (noHostName){
+    return;
+  }
 
   lookupResolver(rpcHost, nameHash, registry, function(err, resolver){
-    dotSetInOrder(1, err? 'Error: Resolver lookup failed: ' + err : null);
+    //dotSetInOrder(1, err? 'Error: Resolver lookup failed: ' + err : null);
+    dotSetInOrder(1, err? 'Error: Resolver lookup failed for "'+hostnameENS+'"' : null);
     if (err){
+      console_log(err);
       return;
     }
     lookupContenthash(rpcHost, nameHash, resolver, function(err, contenthash){
-      dotSetInOrder(2, err? 'Error: Contenthash lookup failed: ' + err : null);
+      //dotSetInOrder(2, err? 'Error: Contenthash lookup failed: ' + err : null);
+      dotSetInOrder(2, err? 'Error: Contenthash lookup failed for "'+hostnameENS+'"' : null);
       if (err){
+        console_log(err);
         return;
       }
       var cid = contenthashToCID(contenthash);
