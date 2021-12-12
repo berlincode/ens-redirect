@@ -8,10 +8,13 @@ import ethEnsNamehash from 'eth-ens-namehash';
 
 const removeDomainLevels = 2;
 
+const version = process.env.PACKAGE_VERSION || 'unknown';
+const infura_key = process.env.INFURA_KEY;
+
 const ipfsBaseUrl = 'https://ipfs.infura.io/ipfs/';
 
 /* mainnet */
-const rpcHost = 'https://mainnet.infura.io/v3/<PROJECT_ID>'; // enter here a valid infura PROJECT_ID
+const rpcHost = 'https://mainnet.infura.io/v3/' + infura_key;
 const registry = '0x314159265dd8dbb310642f98f50c066173c1259b'; // mainnet
 
 /* ropsten */
@@ -21,7 +24,7 @@ const registry = '0x314159265dd8dbb310642f98f50c066173c1259b'; // mainnet
 
 function console_log(msg){
   if (window.console){
-    window.console.log(msg);
+    window.console.log('version', version, ':', msg);
   }
 }
 
@@ -180,14 +183,14 @@ function initInputField(){
 
   document.getElementById('input-submit').disabled = false;
   document.getElementById('input-input').disabled = false;
-
-  //document.getElementById('input-submit').disabled = 'disabled';
-  //document.getElementById('input-input').disabled = 'disabled';
 }
 
 function redirect(hostnameENS){
 
   dotShowInit(); // signal that js started to execute
+
+  const text = document.getElementById('d-text');
+  text.setAttribute('fill', '#ffffff'); // default color: white
 
   const noHostName = (hostnameParts.join('.') == '');
   dotSet(0, noHostName? 'Please Enter a hostname:' : null);
@@ -196,7 +199,7 @@ function redirect(hostnameENS){
   }
 
   /* show which domain we are resolving */
-  document.getElementById('d-text').textContent = 'Redirect to "' + hostnameENS + '"';
+  text.textContent = 'Redirect to "' + hostnameENS + '"';
 
   /* now calculate the hash of the domain which is then send to our ethereum rpc provider */
   const nameHash = ethEnsNamehash.hash(hostnameENS);
@@ -220,6 +223,14 @@ function redirect(hostnameENS){
     });
   });
 }
+
+document.getElementById('input-submit').addEventListener('click', function (evt) {
+  document.getElementById('input-submit').disabled = 'disabled';
+  document.getElementById('input-input').disabled = 'disabled';
+  const hostnameENS = document.getElementById('input-input').value;
+  redirect(hostnameENS);
+  evt.preventDefault();
+});
 
 /* get the hostname from location.hostname by remoming the last parts and by adding '.eth' */
 const hostname = window.location.hostname;
