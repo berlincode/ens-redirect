@@ -6,32 +6,39 @@
   animation-iteration-count: infinite;
   transform-origin: left bottom;
 }
-.d-spinner.d-spinner1 {
-  animation-name: dSpinnerOne;
-  fill: #759caf;
+
+$colors1: #759caf, #b6cad4;
+$colors2: #a3becb, #e4ecf0;
+$colors3: #d0dde4 #ffffff;
+
+$colors_all: $colors1, $colors2, $colors3;
+@for $i from 1 through length($colors_all) {
+  $colors: nth($colors_all, $i);
+
+  .d-spinner.d-spinner#{$i} {
+    animation-name: spinner-anim#{$i};
+    fill: nth($colors, 1);
+  }
+
+  @keyframes spinner-anim#{$i} {
+  }
+
 }
-.d-spinner.d-spinner2 {
-  animation-name: dSpinnerTwo;
-  fill: #a3becb;
-}
-.d-spinner.d-spinner3 {
-  animation-name: dSpinnerThree;
-  fill: #d0dde4;
-}
-@keyframes dSpinnerOne {
+
+@keyframes spinner-anim1 {
   0% {
     opacity: 0;
-    fill: #b6cad4;
+    fill: nth($colors1, 2);
     transform: rotateZ(-65deg) scale(0.6);
   }
   7% {
     opacity: 1;
-    fill: #b6cad4;
+    fill: nth($colors1, 2);
     transform: rotateZ(0) scale(1);
   }
   57% {
     animation-timing-function: cubic-bezier(0, 0, 0, 1);
-    fill: #759caf;
+    fill: nth($colors1, 1);
   }
   74% {
     opacity: 1;
@@ -47,24 +54,24 @@
     transform: rotateZ(45deg) scale(0.61);
   }
 }
-@keyframes dSpinnerTwo {
+@keyframes spinner-anim2 {
   0% {
     opacity: 0;
     transform: rotateZ(-65deg) scale(0.6);
   }
   3% {
     opacity: 0;
-    fill: #e4ecf0;
+    fill: nth($colors2, 2);
     transform: rotateZ(-65deg) scale(0.6);
   }
   10% {
     opacity: 1;
-    fill: #e4ecf0;
+    fill: nth($colors2, 2);
     transform: rotateZ(0) scale(1);
   }
   60% {
     animation-timing-function: cubic-bezier(0, 0, 0, 1);
-    fill: #a3becb;
+    fill: nth($colors2, 1);
   }
   71% {
     opacity: 1;
@@ -80,23 +87,23 @@
     transform: rotateZ(45deg) scale(0.61);
   }
 }
-@keyframes dSpinnerThree {
+@keyframes spinner-anim3 {
   0% {
     opacity: 0;
     transform: rotateZ(-65deg) scale(0.6);
   }
   6% {
     opacity: 0;
-    fill: white;
+    fill: nth($colors3, 2);
     transform: rotateZ(-65deg) scale(0.6);
   }
   13% {
     opacity: 1;
-    fill: white;
+    fill: nth($colors3, 2);
     transform: rotateZ(0) scale(1);
   }
   63% {
-    fill: #d0dde4;
+    fill: nth($colors3, 1);
     animation-timing-function: cubic-bezier(0, 0, 0, 1);
   }
   68% {
