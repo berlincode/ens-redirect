@@ -37,13 +37,9 @@ module.exports = {
       'error',
       'never'
     ],
-    'react/jsx-uses-vars': 'error',
-    'react/jsx-uses-react': 'error'
   },
   'plugins': [
     'html',
-    'react',
-    'eslint-plugin-react'
   ],
   'parser': '@babel/eslint-parser',
   'parserOptions': {

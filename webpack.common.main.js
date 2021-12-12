@@ -44,10 +44,8 @@ const configMain = {
                   }
                 }
               ],
-              '@babel/preset-react'
             ],
             plugins: [
-              '@babel/plugin-transform-react-jsx',
               '@babel/plugin-proposal-class-properties',
               '@babel/plugin-transform-runtime',
             ],
@@ -99,7 +97,8 @@ const configMain = {
       'process.env.PACKAGE_VERSION': JSON.stringify(process.env.PACKAGE_VERSION),
       'process.env.PACKAGE_NAME': JSON.stringify(process.env.PACKAGE_NAME),
       'process.env.NODE_DEBUG': JSON.stringify(process.env.NODE_DEBUG),
-      'process.env.DEBUG': JSON.stringify(process.env.DEBUG)
+      'process.env.DEBUG': JSON.stringify(process.env.DEBUG),
+      'process.env.INFURA_KEY': JSON.stringify(process.env.INFURA_KEY),
     }),
     new ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
