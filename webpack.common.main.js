@@ -108,7 +108,7 @@ const configMain = {
     new HtmlWebpackPlugin({
       template: 'template/index.html',
       inject: 'body',
-      scriptLoading: 'block', // 'defer' attribute is invalid unless src attribtute is also specified
+      scriptLoading: 'blocking', // 'defer' attribute is invalid unless src attribtute is also specified
     }),
     new HtmlInlineScriptPlugin(),
     new HTMLInlineCSSWebpackPlugin({
