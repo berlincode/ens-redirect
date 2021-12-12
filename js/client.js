@@ -139,13 +139,61 @@ function lookupContenthash(host, nameHash, resolver, done){
   });
 }
 
-
 function contenthashToCID(contenthash){
   // first byte should be 'e3' for ipfs, then '01' - add 'f' to sign hex codes cid
   return 'f' + contenthash.substr(4);
 }
 
+/*
+  dots:
+      #0: no ens name to reslove
+      #1: lookupResolver
+      #2: lookupContenthash
+*/
+const dots = 3; // we have 3 dots
+function dotShowInit(){
+  document.getElementById('d-dot').style.display = 'block';
+  for (let i=0 ; i < dots ; i ++){
+    document.getElementById('d-dot' + i).setAttribute('fill', '#1ba3d9');
+  }
+}
+
+function dotSet(dotNr, error){
+  document.getElementById('d-dot' + dotNr).setAttribute('fill', error? '#ff0000' : '#b3e0f2');
+  if (error){
+    const text = document.getElementById('d-text');
+    text.textContent = error;
+    text.setAttribute('fill', '#ff0000'); // red = error
+
+    try{
+      initInputField();
+
+      console_log(error);
+      //sendError('Error: '+ error); // TODO
+    } catch (e){/*empty*/}
+  }
+}
+
+function initInputField(){
+  // show input field
+  document.getElementById('input').style.display = 'block';
+
+  document.getElementById('input-submit').disabled = false;
+  document.getElementById('input-input').disabled = false;
+
+  //document.getElementById('input-submit').disabled = 'disabled';
+  //document.getElementById('input-input').disabled = 'disabled';
+}
+
 function redirect(hostnameENS){
+
+  dotShowInit(); // signal that js started to execute
+
+  const noHostName = (hostnameParts.join('.') == '');
+  dotSet(0, noHostName? 'Please Enter a hostname:' : null);
+  if (noHostName){
+    return;
+  }
 
   /* show which domain we are resolving */
   document.getElementById('d-text').textContent = 'Redirect to "' + hostnameENS + '"';
@@ -153,67 +201,16 @@ function redirect(hostnameENS){
   /* now calculate the hash of the domain which is then send to our ethereum rpc provider */
   const nameHash = ethEnsNamehash.hash(hostnameENS);
 
-  /*
-    dots:
-        #0: no ens name to reslove
-        #1: lookupResolver
-        #2: lookupContenthash
-  */
-  function dotShow(){
-    document.getElementById('d-dot').style.display = 'block';
-  }
-  function dotSet(dotNr, error){
-    document.getElementById('d-dot' + dotNr).setAttribute('fill', error? '#ff0000' : '#b3e0f2');
-    if (error){
-      const text = document.getElementById('d-text');
-      text.textContent = error;
-      text.setAttribute('fill', '#ff0000');
-    }
-  }
-  let dotCurrent = 0;
-  let dotState = [];
-  function dotSetInOrder(dotNr, error){
-    dotState[dotNr] = error;
-
-    while (typeof(dotState[dotCurrent]) !== 'undefined'){
-      dotSet(dotCurrent, dotState[dotCurrent]);
-      dotCurrent ++;
-    }
-
-    try{
-      if (error){
-        // show input field
-        document.getElementById('input').style.display = 'block';
-        document.getElementById('input-submit').disabled = 'disabled';
-        document.getElementById('input-input').disabled = 'disabled';
-
-        //document.getElementById('input-submit').disabled = false;
-        //document.getElementById('input-input').disabled = false;
-
-        console_log(error);
-        //sendError('Error: '+ error);
-      }
-    } catch (e){/*empty*/}
-  }
-
-  dotShow(); // signal that js started to execute
-
-  const noHostName = (hostnameParts.join('.') == '');
-  dotSetInOrder(0, noHostName? 'Please Enter a hostname:' : null);
-  if (noHostName){
-    return;
-  }
-
   lookupResolver(rpcHost, nameHash, registry, function(err, resolver){
-    //dotSetInOrder(1, err? 'Error: Resolver lookup failed: ' + err : null);
-    dotSetInOrder(1, err? 'Error: Resolver lookup failed for "'+hostnameENS+'"' : null);
+    //dotSet(1, err? 'Error: Resolver lookup failed: ' + err : null);
+    dotSet(1, err? 'Error: Resolver lookup failed for "'+hostnameENS+'"' : null);
     if (err){
       console_log(err);
       return;
     }
     lookupContenthash(rpcHost, nameHash, resolver, function(err, contenthash){
-      //dotSetInOrder(2, err? 'Error: Contenthash lookup failed: ' + err : null);
-      dotSetInOrder(2, err? 'Error: Contenthash lookup failed for "'+hostnameENS+'"' : null);
+      //dotSet(2, err? 'Error: Contenthash lookup failed: ' + err : null);
+      dotSet(2, err? 'Error: Contenthash lookup failed for "'+hostnameENS+'"' : null);
       if (err){
         console_log(err);
         return;
