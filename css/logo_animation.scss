@@ -1,4 +1,7 @@
 // vim: sts=2:ts=2:sw=2
+/*@use "sass:map";*/
+/*@use "sass:color";*/
+
 .d-spinner {
   animation-duration: 2.4s;
   animation-timing-function: cubic-bezier(0, 1, 0.3, 1);
@@ -7,46 +10,53 @@
   transform-origin: left bottom;
 }
 
-$colors1: #759caf, #b6cad4;
-$colors2: #a3becb, #e4ecf0;
-$colors3: #d0dde4 #ffffff;
-
-$colors_all: $colors1, $colors2, $colors3;
+$colors_all: (
+  ("class": ".d-spinner.d-spinner1_1", "offset": 0.00, "color_dark": #759caf, "color_light": #b6cad4),
+  ("class": ".d-spinner.d-spinner1_2", "offset": 0.00, "color_dark": darken(#759caf, 15%), "color_light": darken(#b6cad4, 15%)),
+  ("class": ".d-spinner.d-spinner2_1", "offset": 0.03, "color_dark": #a3becb, "color_light": #e4ecf0),
+  ("class": ".d-spinner.d-spinner2_2", "offset": 0.03, "color_dark": darken(#a3becb, 15%), "color_light": darken(#e4ecf0, 15%)),
+  ("class": ".d-spinner.d-spinner3_1", "offset": 0.06, "color_dark": #d0dde4, "color_light": #ffffff),
+  ("class": ".d-spinner.d-spinner3_2", "offset": 0.06, "color_dark": darken(#d0dde4, 15%), "color_light": darken(#ffffff, 15%))
+);
 
 @for $i from 1 through length($colors_all) {
-  $colors: nth($colors_all, $i);
+  $color_dict: nth($colors_all, $i);
 
-  .d-spinner.d-spinner#{$i} {
+  $color_dark: map-get($color_dict, "color_dark");
+  $color_light: map-get($color_dict, "color_light");
+  $class: map-get($color_dict, "class");
+  $offset: map-get($color_dict, "offset");
+
+  #{$class} {
     animation-name: spinner-anim#{$i};
-    fill: nth($colors, 1);
+    fill: $color_dark;
   }
 
   @keyframes spinner-anim#{$i} {
-    $per: percentage(4/12);
     0% {
       opacity: 0;
       transform: rotateZ(-65deg) scale(0.6);
     }
-    #{percentage(0.01 + ($i - 1) * 0.03)} {
+    #{percentage(0.01 + $offset)} {
       opacity: 0;
-      fill: nth($colors, 2);
+      fill: $color_light;
       transform: rotateZ(-65deg) scale(0.6);
     }
-    #{percentage(0.07 + ($i - 1) * 0.03)} {
+    #{percentage(0.07 + $offset)} {
       opacity: 1;
-      fill: nth($colors, 2);
+      fill: $color_light;
       transform: rotateZ(0) scale(1);
     }
-    #{percentage(0.57 + ($i - 1) * 0.03)} {
+    #{percentage(0.57 + $offset)} {
       animation-timing-function: cubic-bezier(0, 0, 0, 1);
-      fill: nth($colors, 1);
+      fill: $color_dark;
     }
-    #{percentage(0.74 - ($i - 1) * 0.03)} {
+    #{percentage(0.74 - $offset)} {
       opacity: 1;
       transform: rotateZ(0) scale(1);
       animation-timing-function: cubic-bezier(0, 0, 1, 0);
     }
-    #{percentage(0.83 - ($i - 1) * 0.03)} {
+    #{percentage(0.83 - $offset)} {
       opacity: 0;
       transform: rotateZ(45deg) scale(0.61);
     }
