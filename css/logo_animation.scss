@@ -1,6 +1,3 @@
-#d-spinner-overlay-xxxxxxx {
-  position: fixed;
-}
 #d-spinner-overlay {
   position: fixed;
   width: 100%;
@@ -26,10 +23,6 @@
 
 #d-spinner-overlay svg {
   overflow: visible; /* for dots */
-}
-
-.d-dot {
-  fill: #1ba3d9;
 }
 
 .d-spinner {
@@ -58,11 +51,6 @@
   -webkit-animation-name: dSpinnerThree;
           animation-name: dSpinnerThree;
   fill: #d0dde4;
-}
-.d-spinner.d-spinner4 {
-  -webkit-animation-name: dSpinnerFour;
-          animation-name: dSpinnerFour;
-  fill: #FEFEFE;
 }
 @-webkit-keyframes dSpinnerOne {
   0% {
@@ -290,88 +278,6 @@
             animation-timing-function: cubic-bezier(0, 0, 1, 0);
   }
   76% {
-    opacity: 0;
-    -webkit-transform: rotateZ(45deg) scale(0.61);
-            transform: rotateZ(45deg) scale(0.61);
-  }
-  100% {
-    opacity: 0;
-    -webkit-transform: rotateZ(45deg) scale(0.61);
-            transform: rotateZ(45deg) scale(0.61);
-  }
-}
-@-webkit-keyframes dSpinnerFour {
-  0% {
-    opacity: 0;
-    -webkit-transform: rotateZ(-65deg) scale(0.6);
-            transform: rotateZ(-65deg) scale(0.6);
-  }
-  9% {
-    opacity: 0;
-    fill: white;
-    -webkit-transform: rotateZ(-65deg) scale(0.6);
-            transform: rotateZ(-65deg) scale(0.6);
-  }
-  16% {
-    opacity: 1;
-    fill: white;
-    -webkit-transform: rotateZ(0) scale(1);
-            transform: rotateZ(0) scale(1);
-  }
-  64% {
-    fill: #FEFEFE;
-    -webkit-animation-timing-function: cubic-bezier(0, 0, 0, 1);
-            animation-timing-function: cubic-bezier(0, 0, 0, 1);
-  }
-  65% {
-    opacity: 1;
-    -webkit-transform: rotateZ(0) scale(1);
-            transform: rotateZ(0) scale(1);
-    -webkit-animation-timing-function: cubic-bezier(0, 0, 1, 0);
-            animation-timing-function: cubic-bezier(0, 0, 1, 0);
-  }
-  73% {
-    opacity: 0;
-    -webkit-transform: rotateZ(45deg) scale(0.61);
-            transform: rotateZ(45deg) scale(0.61);
-  }
-  100% {
-    opacity: 0;
-    -webkit-transform: rotateZ(45deg) scale(0.61);
-            transform: rotateZ(45deg) scale(0.61);
-  }
-}
-@keyframes dSpinnerFour {
-  0% {
-    opacity: 0;
-    -webkit-transform: rotateZ(-65deg) scale(0.6);
-            transform: rotateZ(-65deg) scale(0.6);
-  }
-  9% {
-    opacity: 0;
-    fill: white;
-    -webkit-transform: rotateZ(-65deg) scale(0.6);
-            transform: rotateZ(-65deg) scale(0.6);
-  }
-  16% {
-    opacity: 1;
-    fill: white;
-    -webkit-transform: rotateZ(0) scale(1);
-            transform: rotateZ(0) scale(1);
-  }
-  64% {
-    fill: #FEFEFE;
-    -webkit-animation-timing-function: cubic-bezier(0, 0, 0, 1);
-            animation-timing-function: cubic-bezier(0, 0, 0, 1);
-  }
-  65% {
-    opacity: 1;
-    -webkit-transform: rotateZ(0) scale(1);
-            transform: rotateZ(0) scale(1);
-    -webkit-animation-timing-function: cubic-bezier(0, 0, 1, 0);
-            animation-timing-function: cubic-bezier(0, 0, 1, 0);
-  }
-  73% {
     opacity: 0;
     -webkit-transform: rotateZ(45deg) scale(0.61);
             transform: rotateZ(45deg) scale(0.61);
