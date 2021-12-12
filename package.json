@@ -21,8 +21,7 @@
     "template/"
   ],
   "repository": {},
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "@babel/core": "~7.16.0",
     "@babel/eslint-parser": "~7.16.3",
     "@babel/plugin-proposal-class-properties": "~7.16.0",
@@ -53,6 +52,7 @@
     "webpack-dev-server": "^4.6.0",
     "webpack-merge": "^5.7.3"
   },
+  "devDependencies": {},
   "engine": {
     "node": "10.6.0"
   }
