@@ -6,7 +6,7 @@ import '../css/base.scss';
 
 import ethEnsNamehash from 'eth-ens-namehash';
 
-const removeDomainLevels = 2;
+const domainLevels = 2;
 
 const version = process.env.PACKAGE_VERSION || 'unknown';
 const infura_key = process.env.INFURA_KEY;
@@ -24,6 +24,49 @@ function console_log(msg){
     window.console.log('version', version, ':', msg);
   }
 }
+
+/* get the hostname from location.hostname by remoming the last parts and by adding '.eth' */
+const domainPartsEns = window.location.hostname.split('.');
+const domainPartsCurrent = [];
+for (let i=0; i < domainLevels ; i++){
+  const part = domainPartsEns.pop();
+  domainPartsCurrent.unshift(part);
+}
+
+const domainEns = domainPartsEns.join('.') + '.eth';
+const domainCurrent = domainPartsCurrent.join('.');
+
+/* attach event listeners */
+
+const inputSubmit = document.getElementById('input-submit');
+const inputInput = document.getElementById('input-input');
+const inputError = document.getElementById('input-error');
+const inputDirectlink = document.getElementById('input-directlink');
+const inputDirectlinkA = document.getElementById('input-directlink-a');
+
+inputSubmit.addEventListener('click', function (evt) {
+  inputSubmit.disabled = 'disabled';
+  inputInput.disabled = 'disabled';
+  const domain = inputInput.value;
+  redirect(domain, false);
+  evt.preventDefault();
+});
+
+inputInput.addEventListener('input', function (){
+  const inputValueParts = inputInput.value.split('.');
+  if ((inputValueParts.length > 1) && (inputValueParts[inputValueParts.length -1] == 'eth')){ 
+    inputError.style.display = 'none';
+    inputDirectlink.style.display = 'block';
+
+    inputValueParts.pop(); // remove 'eth'
+    const url = inputValueParts.join('.') + '.' + domainCurrent; 
+    inputDirectlinkA.textContent = url;
+    inputDirectlinkA.href = window.location.protocol + '//' + url;
+  } else {
+    inputError.style.display = 'block';
+    inputDirectlink.style.display = 'none';
+  }
+});
 
 function removePrefix(hex){
   if (hex.substr(0, 2) === '0x')
@@ -170,13 +213,20 @@ function textSet(string, color){
 }
 
 function initInputField(domain){
-  // show input field
+  // show input field (hided by default)
   document.getElementById('input').style.display = 'block';
 
-  document.getElementById('input-submit').disabled = false;
-  document.getElementById('input-input').disabled = false;
+  inputSubmit.disabled = false;
+  inputInput.disabled = false;
 
-  document.getElementById('input-input').value = domain;
+  inputInput.value = domain;
+  
+  // triger update of direct link
+  const event = new Event('input', {
+    bubbles: true,
+    cancelable: true,
+  });
+  inputInput.dispatchEvent(event);
 }
 
 function redirect(hostnameENS, windowLocationReplace){
@@ -229,20 +279,5 @@ function redirect(hostnameENS, windowLocationReplace){
   });
 }
 
-document.getElementById('input-submit').addEventListener('click', function (evt) {
-  document.getElementById('input-submit').disabled = 'disabled';
-  document.getElementById('input-input').disabled = 'disabled';
-  const hostnameENS = document.getElementById('input-input').value;
-  redirect(hostnameENS, false);
-  evt.preventDefault();
-});
-
-/* get the hostname from location.hostname by remoming the last parts and by adding '.eth' */
-const hostname = window.location.hostname;
-const hostnameParts = hostname.split('.');
-for (let i=0; i < removeDomainLevels ; i++){
-  hostnameParts.pop();
-}
-const hostnameENS = hostnameParts.join('.') + '.eth';
-redirect(hostnameENS, true);
+redirect(domainEns, true);
 
