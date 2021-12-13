@@ -13,14 +13,11 @@ const infura_key = process.env.INFURA_KEY;
 
 const ipfsBaseUrl = 'https://ipfs.infura.io/ipfs/';
 
-/* mainnet */
-const rpcHost = 'https://mainnet.infura.io/v3/' + infura_key;
-const registry = '0x314159265dd8dbb310642f98f50c066173c1259b'; // mainnet
+const rpcHost = 'https://mainnet.infura.io/v3/' + infura_key; /* mainnet */
+const registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e'; // see https://docs.ens.domains/ens-deployments
 
-/* ropsten */
-//const rpcHost = 'https://ropsten.infura.io/v3/<PROJECT_ID>'; // enter here a valid infura PROJECT_ID
-//const registry = '0x112234455c3a32fd11230c42e7bccd4a84e02010'; // ropsten
-
+const colorRed = '#ff0000';
+const colorDot = '#b3e0f2';
 
 function console_log(msg){
   if (window.console){
@@ -154,72 +151,80 @@ function contenthashToCID(contenthash){
       #2: lookupContenthash
 */
 const dots = 3; // we have 3 dots
+
+function dotSet(dotNr, color){
+  document.getElementById('d-dot' + dotNr).setAttribute('fill', color);
+}
+
 function dotShowInit(){
   document.getElementById('d-dot').style.display = 'block';
   for (let i=0 ; i < dots ; i ++){
-    document.getElementById('d-dot' + i).setAttribute('fill', '#1ba3d9');
+    dotSet(i, '#1ba3d9');
   }
 }
 
-function dotSet(dotNr, error){
-  document.getElementById('d-dot' + dotNr).setAttribute('fill', error? '#ff0000' : '#b3e0f2');
-  if (error){
-    const text = document.getElementById('d-text');
-    text.textContent = error;
-    text.setAttribute('fill', '#ff0000'); // red = error
-
-    try{
-      initInputField();
-
-      console_log(error);
-      //sendError('Error: '+ error); // TODO
-    } catch (e){/*empty*/}
-  }
+function textSet(string, color){
+  const text = document.getElementById('d-text');
+  text.textContent = string;
+  text.setAttribute('fill', color);
 }
 
-function initInputField(){
+function initInputField(domain){
   // show input field
   document.getElementById('input').style.display = 'block';
 
   document.getElementById('input-submit').disabled = false;
   document.getElementById('input-input').disabled = false;
+
+  document.getElementById('input-input').value = domain;
 }
 
-function redirect(hostnameENS){
+function redirect(hostnameENS, windowLocationReplace){
 
   dotShowInit(); // signal that js started to execute
 
-  const text = document.getElementById('d-text');
-  text.setAttribute('fill', '#ffffff'); // default color: white
-
-  const noHostName = (hostnameParts.join('.') == '');
-  dotSet(0, noHostName? 'Please Enter a hostname:' : null);
+  const noHostName = (hostnameENS == '.eth');
   if (noHostName){
+    // no real error
+    //dotSet(0, colorRed);
+    textSet('Please Enter a valid hostname:', '#ffffff');
+    initInputField('ethereum.eth'); // default domain to show
     return;
   }
 
   /* show which domain we are resolving */
-  text.textContent = 'Redirect to "' + hostnameENS + '"';
+  dotSet(0, colorDot);
+  textSet('Redirect to "' + hostnameENS + '"', '#ffffff');
 
   /* now calculate the hash of the domain which is then send to our ethereum rpc provider */
   const nameHash = ethEnsNamehash.hash(hostnameENS);
 
   lookupResolver(rpcHost, nameHash, registry, function(err, resolver){
-    //dotSet(1, err? 'Error: Resolver lookup failed: ' + err : null);
-    dotSet(1, err? 'Error: Resolver lookup failed for "'+hostnameENS+'"' : null);
     if (err){
+      dotSet(1, colorRed);
+      textSet('Error: Resolver lookup failed for "'+hostnameENS+'"', colorRed);
+      initInputField(hostnameENS);
       console_log(err);
       return;
     }
+    dotSet(1, colorDot);
     lookupContenthash(rpcHost, nameHash, resolver, function(err, contenthash){
-      //dotSet(2, err? 'Error: Contenthash lookup failed: ' + err : null);
-      dotSet(2, err? 'Error: Contenthash lookup failed for "'+hostnameENS+'"' : null);
       if (err){
+        dotSet(2, colorRed);
+        textSet('Error: Contenthash lookup failed for "'+hostnameENS+'"', colorRed);
+        initInputField(hostnameENS);
         console_log(err);
         return;
       }
+      dotSet(2, colorDot);
       const cid = contenthashToCID(contenthash);
-      window.location.replace(ipfsBaseUrl + cid + location.pathname);
+      const url = ipfsBaseUrl + cid + location.pathname;
+
+      if (windowLocationReplace){
+        window.location.replace(url);
+      } else {
+        window.location = url;
+      }
     });
   });
 }
@@ -228,7 +233,7 @@ document.getElementById('input-submit').addEventListener('click', function (evt)
   document.getElementById('input-submit').disabled = 'disabled';
   document.getElementById('input-input').disabled = 'disabled';
   const hostnameENS = document.getElementById('input-input').value;
-  redirect(hostnameENS);
+  redirect(hostnameENS, false);
   evt.preventDefault();
 });
 
@@ -239,5 +244,5 @@ for (let i=0; i < removeDomainLevels ; i++){
   hostnameParts.pop();
 }
 const hostnameENS = hostnameParts.join('.') + '.eth';
-redirect(hostnameENS);
+redirect(hostnameENS, true);
 
