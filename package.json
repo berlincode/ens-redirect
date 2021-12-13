@@ -12,6 +12,7 @@
     "build": "npm run clean && PACKAGE_VERSION=$npm_package_version PACKAGE_NAME=$npm_package_name webpack --config webpack.prod.js",
     "clean": "rimraf dist && mkdir dist",
     "eslint": "eslint *.cjs ./js",
+    "readme":"pandoc -f markdown -t html5 -o README.html README.md",
     "serve": "cd dist && ws --hostname 127.0.0.1 --port 7998",
     "webpack-start": "npm run clean && webpack serve --config webpack.dev.js --progress"
   },
