@@ -57,6 +57,7 @@ inputInput.addEventListener('input', function (){
   if ((inputValueParts.length > 1) && (inputValueParts[inputValueParts.length -1] == 'eth')){ 
     inputError.style.display = 'none';
     inputDirectlink.style.display = 'block';
+    inputSubmit.disabled = false;
 
     inputValueParts.pop(); // remove 'eth'
     const url = inputValueParts.join('.') + '.' + domainCurrent; 
@@ -65,6 +66,7 @@ inputInput.addEventListener('input', function (){
   } else {
     inputError.style.display = 'block';
     inputDirectlink.style.display = 'none';
+    inputSubmit.disabled = true;
   }
 });
 
@@ -235,9 +237,9 @@ function redirect(hostnameENS, windowLocationReplace){
 
   const noHostName = (hostnameENS == '.eth');
   if (noHostName){
-    // no real error
+    // no real error - just show the input field
     //dotSet(0, colorRed);
-    textSet('Please Enter a valid hostname:', '#ffffff');
+    //textSet('Please Enter a valid hostname:', '#ffffff');
     initInputField('ethereum.eth'); // default domain to show
     return;
   }
