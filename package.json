@@ -18,7 +18,8 @@
   "files": [
     "css",
     "js",
-    "template/"
+    "template/",
+    "*.js"
   ],
   "repository": {},
   "dependencies": {
