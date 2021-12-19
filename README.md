@@ -13,7 +13,7 @@ Test it online:
 
 This project is online at: [eth-link.com](https://eth-link.com)
 
-So if you want to visit e.g. "ethereum.eth" you
+So if you want to visit e.g. "**ethereum.eth**" you
 can now directly use: [**ethereum.eth**-link.com](https://ethereum.eth-link.com).
 
 Again, this should work in all Browsers.

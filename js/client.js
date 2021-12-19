@@ -45,28 +45,43 @@ const inputDirectlink = document.getElementById('input-directlink');
 const inputDirectlinkA = document.getElementById('input-directlink-a');
 
 inputSubmit.addEventListener('click', function (evt) {
+  const url = new URL('http://' + inputInput.value);
   inputSubmit.disabled = 'disabled';
   inputInput.disabled = 'disabled';
   const domain = inputInput.value;
-  redirect(domain, false);
+  redirect(domain, url, false);
   evt.preventDefault();
 });
 
 inputInput.addEventListener('input', function (){
-  const inputValueParts = inputInput.value.split('.');
-  if ((inputValueParts.length > 1) && (inputValueParts[inputValueParts.length -1] == 'eth')){ 
+  let url;
+  let error;
+  let inputValueParts;
+  try {
+    url = new URL('http://' + inputInput.value);
+    inputValueParts = url.host.split('.');
+    if ((inputValueParts.length <= 1) || (inputValueParts[inputValueParts.length -1] != 'eth')){ 
+      error = 'Domain part must end with ".eth"';
+    }
+  } catch (err){
+    error = 'Must be a valid URL without http(s)://';
+  }
+
+  if (error){
+    inputError.style.display = 'block';
+    inputDirectlink.style.display = 'none';
+    inputSubmit.disabled = true;
+
+    inputError.textContent = error;
+  } else {
     inputError.style.display = 'none';
     inputDirectlink.style.display = 'block';
     inputSubmit.disabled = false;
 
     inputValueParts.pop(); // remove 'eth'
-    const url = inputValueParts.join('.') + '.' + domainCurrent; 
-    inputDirectlinkA.textContent = url;
-    inputDirectlinkA.href = window.location.protocol + '//' + url;
-  } else {
-    inputError.style.display = 'block';
-    inputDirectlink.style.display = 'none';
-    inputSubmit.disabled = true;
+    const urlNew = inputValueParts.join('.') + '.' + domainCurrent + url.pathname + url.search + url.hash;
+    inputDirectlinkA.textContent = urlNew;
+    inputDirectlinkA.href = window.location.protocol + '//' + urlNew;
   }
 });
 
@@ -231,7 +246,7 @@ function initInputField(domain){
   inputInput.dispatchEvent(event);
 }
 
-function redirect(hostnameENS, windowLocationReplace){
+function redirect(hostnameENS, url, windowLocationReplace){
 
   dotShowInit(); // signal that js started to execute
 
@@ -255,7 +270,7 @@ function redirect(hostnameENS, windowLocationReplace){
     if (err){
       dotSet(1, colorRed);
       textSet('Error: Resolver lookup failed for "'+hostnameENS+'"', colorRed);
-      initInputField(hostnameENS);
+      initInputField(hostnameENS + url.pathname + url.search + url.hash);
       console_log(err);
       return;
     }
@@ -270,16 +285,16 @@ function redirect(hostnameENS, windowLocationReplace){
       }
       dotSet(2, colorDot);
       const cid = contenthashToCID(contenthash);
-      const url = ipfsBaseUrl + cid + location.pathname;
+      const urlNew = ipfsBaseUrl + cid + url.pathname + url.search + url.hash;
 
       if (windowLocationReplace){
-        window.location.replace(url);
+        window.location.replace(urlNew);
       } else {
-        window.location = url;
+        window.location = urlNew;
       }
     });
   });
 }
 
-redirect(domainEns, true);
+redirect(domainEns, location, true);
 
