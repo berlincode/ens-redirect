@@ -11,7 +11,7 @@ const domainLevels = 2;
 const version = process.env.PACKAGE_VERSION || 'unknown';
 const infura_key = process.env.INFURA_KEY;
 
-const ipfsBaseUrl = 'https://ipfs.infura.io/ipfs/';
+const ipfsBaseUrl = 'https://infura-ipfs.io/ipfs/';
 
 const rpcHost = 'https://mainnet.infura.io/v3/' + infura_key; /* mainnet */
 const registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e'; // see https://docs.ens.domains/ens-deployments

@@ -50,7 +50,7 @@ Additional information
 
 This service makes use of Infura's Ethereum RPC provider 
 [https://mainnet.infura.io](https://mainnet.infura.io) as well as Infura's IPFS gateway at
-[https://ipfs.infura.io/ipfs/](https://ipfs.infura.io/ipfs/). Both may be set/changed in the source code.
+[https://infura-ipfs.io/ipfs/](https://infura-ipfs.io/ipfs/). Both may be set/changed in the source code.
 
 
 This project makes use of ENS contenthash name resolution [EIP-1577](https://eips.ethereum.org/EIPS/eip-1577).
